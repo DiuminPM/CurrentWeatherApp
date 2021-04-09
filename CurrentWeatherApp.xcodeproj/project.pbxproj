@@ -14,6 +14,7 @@
 		1FA3EAAE26209F6B00B02D05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3EAAD26209F6B00B02D05 /* Assets.xcassets */; };
 		1FA3EAB126209F6B00B02D05 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3EAB026209F6B00B02D05 /* Preview Assets.xcassets */; };
 		1FA3EAB426209F6B00B02D05 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3EAB226209F6B00B02D05 /* LaunchScreen.storyboard */; };
+		1FA3EAFF2620E1C600B02D05 /* SeachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3EAFE2620E1C600B02D05 /* SeachView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		1FA3EAB026209F6B00B02D05 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1FA3EAB326209F6B00B02D05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1FA3EAB526209F6B00B02D05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FA3EAFE2620E1C600B02D05 /* SeachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeachView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				1FA3EAA426209F6900B02D05 /* AppDelegate.swift */,
 				1FA3EAA626209F6900B02D05 /* SceneDelegate.swift */,
 				1FA3EAA826209F6900B02D05 /* ContentView.swift */,
+				1FA3EAFE2620E1C600B02D05 /* SeachView.swift */,
 				1FA3EAAD26209F6B00B02D05 /* Assets.xcassets */,
 				1FA3EAB226209F6B00B02D05 /* LaunchScreen.storyboard */,
 				1FA3EAB526209F6B00B02D05 /* Info.plist */,
@@ -148,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FA3EAFF2620E1C600B02D05 /* SeachView.swift in Sources */,
 				1FA3EAA526209F6900B02D05 /* AppDelegate.swift in Sources */,
 				1FA3EAA726209F6900B02D05 /* SceneDelegate.swift in Sources */,
 				1FA3EAAC26209F6900B02D05 /* CurrentWeatherApp.xcdatamodeld in Sources */,
