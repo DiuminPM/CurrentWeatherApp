@@ -28,20 +28,21 @@ struct SeachView_Previews: PreviewProvider {
 struct SearschContentView: View {
     @Binding var search: String
     var body: some View {
-        HStack {
+        HStack() {
             Image(systemName: "magnifyingglass")
                 .resizable()
-                .frame(width: 25, height: 25)
-                .foregroundColor(Color("textColor"))
-                .padding(5)
+                .frame(width: 20, height: 20)
+                .foregroundColor(Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
+                .padding(15)
             TextField("search city", text: $search)
                 .font(.system(size: 18, weight: .medium))
                 .foregroundColor(Color("textColor"))
         }
-        .frame(width: UIScreen.main.bounds.width - 32, height: 50, alignment: .center)
-        .background(Color(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)))
+        .frame(height: 40, alignment: .center)
+        .background(Color(#colorLiteral(red: 0.02182334103, green: 0.005694539752, blue: 0.02355073579, alpha: 0.07800747701)))
         .cornerRadius(10)
-        .shadow(color: Color(.black).opacity(0.6), radius: 4, x: 3, y: 3)
+//        .shadow(color: Color(.black).opacity(0.6), radius: 4, x: 3, y: 3)
+        .padding()
         
     }
 }
@@ -50,9 +51,12 @@ struct LabelCurrentCity: View {
     @Binding var toggleValue: Bool
     var body: some View {
         VStack{
-            Text("Stuttgard")
-                .font(.system(size: 36))
-                .foregroundColor(.black)
+            HStack {
+                Text("Stuttgard")
+                    .font(.system(size: 36))
+                    .foregroundColor(.black)
+                Spacer()
+            } .padding()
             HStack{
                 Text("31˚")
                     .font(.system(size: 26))
@@ -66,8 +70,10 @@ struct LabelCurrentCity: View {
                     .font(.system(size: 26))
                     .foregroundColor(.black)
                 
-            }
+            } .padding()
         }
+        .frame(height: 150)
+        .background(Color(#colorLiteral(red: 0.07280416042, green: 0.7571062446, blue: 0.9571402669, alpha: 1)))
         
     }
 }

@@ -11,18 +11,21 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             
-            SeachView()
-                .multilineTextAlignment(.center)
-                .padding()
-                .navigationBarTitle(Text("Weather"), displayMode: .inline)
-                
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {}) {
-                                Image(systemName: "location.circle")
+            VStack {
+                SeachView()
+                    .multilineTextAlignment(.leading)
+                    
+                    .navigationBarTitle(Text("Weather"), displayMode: .inline)
+                    
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                                Button(action: {}) {
+                                    Image(systemName: "location.circle")
+                            }
                         }
-                    }
                 }
+                Spacer()
+            }
                 
             
         }
