@@ -32,6 +32,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
         }
+        
+            let newAppearance = UINavigationBarAppearance()
+            newAppearance.configureWithOpaqueBackground()
+            newAppearance.backgroundColor = .white
+            newAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+            UINavigationBar.appearance().standardAppearance = newAppearance
+            
+
+            //Other code for displaying the first screen
+        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

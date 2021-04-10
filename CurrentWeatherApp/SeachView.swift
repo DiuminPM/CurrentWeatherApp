@@ -10,11 +10,21 @@ import SwiftUI
 struct SeachView: View {
     @State var search = ""
     @State var toggleValue: Bool = false
+    var currentCity = "Stuttgard"
+    var city = "Petrozavodsk"
+    var temperature = "0"
     
     var body: some View {
-        VStack {
+        VStack() {
             SearschContentView(search: $search)
-            LabelCurrentCity(toggleValue: $toggleValue)
+            LabelCurrentCity(toggleValue: $toggleValue, currentCity: currentCity)
+            List(0..<100) { rowIndex in
+                VStack (alignment: .leading, spacing: 8){
+                        Text("\(city), \(temperature)˚F")
+                        Text("\(CurrentData.dateFormatter())")
+                }
+            }
+            .listStyle(PlainListStyle())
         }
     }
 }
@@ -49,15 +59,16 @@ struct SearschContentView: View {
 
 struct LabelCurrentCity: View {
     @Binding var toggleValue: Bool
+    var currentCity: String
     var body: some View {
         VStack{
             HStack {
-                Text("Stuttgard")
+                Text("\(currentCity)")
                     .font(.system(size: 36))
                     .foregroundColor(.black)
                 Spacer()
             } .padding()
-            HStack{
+            HStack (alignment: .center){
                 Text("31˚")
                     .font(.system(size: 26))
                     .foregroundColor(.black)

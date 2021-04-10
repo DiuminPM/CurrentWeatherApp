@@ -9,26 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationView {
-            
-            VStack {
-                SeachView()
-                    .multilineTextAlignment(.leading)
-                    
-                    .navigationBarTitle(Text("Weather"), displayMode: .inline)
-                    
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: {}) {
-                                    Image(systemName: "location.circle")
-                            }
-                        }
-                }
-                Spacer()
-            }
+            NavigationView {
                 
-            
-        }
+                VStack {
+                    SeachView()
+                    
+                }
+                .multilineTextAlignment(.leading)
+                .navigationBarTitle(Text("Weather"), displayMode: .inline)
+                .onAppear(perform: {
+                    UINavigationBar.appearance().standardAppearance.shadowColor = .clear
+//                    newAppearance.configureWithOpaqueBackground()
+//                    newAppearance.backgroundColor = .white
+                })
+                .toolbar {
+                       ToolbarItem(placement: .navigationBarTrailing) {
+                               Button(action: {}) {
+                                   Image(systemName: "location.circle")
+                                }
+                       }
+               }
+            }
         }
         
     
