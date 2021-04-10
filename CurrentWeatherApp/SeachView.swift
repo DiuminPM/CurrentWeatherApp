@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct SeachView: View {
     @State var search = ""
@@ -13,6 +14,7 @@ struct SeachView: View {
     var currentCity = "Stuttgard"
     var city = "Petrozavodsk"
     var temperature = "0"
+    var apiKey = "1d8b02cdb8fd65b89b50f2d52959d35a"
     
     var body: some View {
         VStack() {

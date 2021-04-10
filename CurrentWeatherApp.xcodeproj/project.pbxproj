@@ -20,6 +20,7 @@
 		1FA3EB0C2621C35E00B02D05 /* APImanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3EB0B2621C35E00B02D05 /* APImanager.swift */; };
 		1FA3EB122621C44600B02D05 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3EB112621C44600B02D05 /* ErrorManager.swift */; };
 		1FA3EB1A2621CCCB00B02D05 /* APIWeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3EB192621CCCB00B02D05 /* APIWeatherManager.swift */; };
+		1FA3EB1D2621CD4A00B02D05 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3EB1C2621CD4A00B02D05 /* CurrentWeather.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		1FA3EB0B2621C35E00B02D05 /* APImanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APImanager.swift; sourceTree = "<group>"; };
 		1FA3EB112621C44600B02D05 /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		1FA3EB192621CCCB00B02D05 /* APIWeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIWeatherManager.swift; sourceTree = "<group>"; };
+		1FA3EB1C2621CD4A00B02D05 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				1FA3EB032621A6C500B02D05 /* CurrentDate.swift */,
+				1FA3EB1C2621CD4A00B02D05 /* CurrentWeather.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FA3EB122621C44600B02D05 /* ErrorManager.swift in Sources */,
+				1FA3EB1D2621CD4A00B02D05 /* CurrentWeather.swift in Sources */,
 				1FA3EB0C2621C35E00B02D05 /* APImanager.swift in Sources */,
 				1FA3EAFF2620E1C600B02D05 /* SeachView.swift in Sources */,
 				1FA3EB042621A6C500B02D05 /* CurrentDate.swift in Sources */,
