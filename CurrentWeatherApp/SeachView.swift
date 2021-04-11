@@ -9,25 +9,29 @@ import SwiftUI
 import CoreLocation
 
 struct SeachView: View {
-    @State var search = ""
+    @StateObject var addWeatherVM = AddWeatherViewModel()
     @State var toggleValue: Bool = false
-    var currentCity = "Stuttgard"
-    var city = "Petrozavodsk"
-    var temperature = "0"
-    var apiKey = "1d8b02cdb8fd65b89b50f2d52959d35a"
+    @State var currentCity: String = "Stuttgard"
+    @State var currentTemperature: Double = 0
+    
+    @ObservedObject var dataWeather = SearchViewModel()
+    
+
+//    var currentCity = "Stuttgard"
+   
+    
+    
+    
     
     var body: some View {
         VStack() {
-            SearschContentView(search: $search)
-            LabelCurrentCity(toggleValue: $toggleValue, currentCity: currentCity)
-            List(0..<100) { rowIndex in
-                VStack (alignment: .leading, spacing: 8){
-                        Text("\(city), \(temperature)˚F")
-                        Text("\(CurrentData.dateFormatter())")
-                }
-            }
-            .listStyle(PlainListStyle())
-        }
+            SearschContentView(search: $addWeatherVM.city, city: $currentCity, temperature: $currentTemperature)
+            LabelCurrentCity(toggleValue: $toggleValue, currentCity: currentCity, currentTemperature: addWeatherVM.switchUnits(temperature: currentTemperature, toggleValue: toggleValue))
+//            List {ForEach(dataWeather.weathers, id: \.id)  { weather in
+//                Cell(currentCity: $currentCity, temperature: $currentTemperature)
+//                }
+//            }
+//            .listStyle(PlainListStyle())
     }
 }
 
@@ -39,6 +43,11 @@ struct SeachView_Previews: PreviewProvider {
 
 struct SearschContentView: View {
     @Binding var search: String
+    @Binding var city: String
+    @Binding var temperature: Double
+    @StateObject var addWeatherVM = AddWeatherViewModel()
+    @StateObject var searchViewModel = SearchViewModel()
+    @State private var isEditing = true
     var body: some View {
         HStack() {
             Image(systemName: "magnifyingglass")
@@ -46,22 +55,32 @@ struct SearschContentView: View {
                 .frame(width: 20, height: 20)
                 .foregroundColor(Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
                 .padding(15)
-            TextField("search city", text: $search)
+            TextField("search city", text: $addWeatherVM.city)
+            {isEditing in
+                self.isEditing = isEditing}
+            onCommit: {
+                addWeatherVM.save { (weather) in
+                    self.temperature = weather.temperature
+                    self.city = weather.city
+                }
+//                searchViewModel.fetchWeathers()
+            }
                 .font(.system(size: 18, weight: .medium))
-                .foregroundColor(Color("textColor"))
+                .foregroundColor(Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
         }
         .frame(height: 40, alignment: .center)
         .background(Color(#colorLiteral(red: 0.02182334103, green: 0.005694539752, blue: 0.02355073579, alpha: 0.07800747701)))
         .cornerRadius(10)
 //        .shadow(color: Color(.black).opacity(0.6), radius: 4, x: 3, y: 3)
         .padding()
-        
+        }
     }
 }
 
 struct LabelCurrentCity: View {
     @Binding var toggleValue: Bool
     var currentCity: String
+    var currentTemperature: Double
     var body: some View {
         VStack{
             HStack {
@@ -71,14 +90,18 @@ struct LabelCurrentCity: View {
                 Spacer()
             } .padding()
             HStack (alignment: .center){
-                Text("31˚")
-                    .font(.system(size: 26))
-                    .foregroundColor(.black)
-                Spacer()
-                Text("F")
-                    .font(.system(size: 26))
-                    .foregroundColor(.black)
-                Toggle("", isOn: $toggleValue)
+                
+                Toggle(isOn: $toggleValue) {
+                    HStack{
+                        Text("\(Int(currentTemperature))˚")
+                            .font(.system(size: 26))
+                            .foregroundColor(.black)
+                        Spacer()
+                        Text("F")
+                            .font(.system(size: 26))
+                            .foregroundColor(.black)
+                    }
+                }
                 Text("C")
                     .font(.system(size: 26))
                     .foregroundColor(.black)
@@ -91,18 +114,15 @@ struct LabelCurrentCity: View {
     }
 }
 
-//struct ToggleDegrees {
-//    @Binding var toggleValue: Bool
+
+//struct Cell: View {
+//    @Binding var currentCity: String
+//    @Binding var temperature: Int
 //    var body: some View {
-//        HStack{
-//            Text("F")
-//                .font(.system(size: 26))
-//                .foregroundColor(.black)
-//            Toggle("", isOn: $toggleValue)
-//            Text("C")
-//                .font(.system(size: 26))
-//                .foregroundColor(.black)
-//        }
+//        VStack (alignment: .leading, spacing: 8){
+//            Text("\(currentCity), \(temperature)˚F")
+//                Text("\(CurrentData.dateFormatter())")
+//            }
 //    }
 //
 //}

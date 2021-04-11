@@ -6,6 +6,6 @@
 //
 
 import Foundation
-public let SWINetworkingErrorDomain = "ru.swiftbook.WeatherApp.NetworkingError"
+public let SWINetworkingErrorDomain = "ru.Diumin.WeatherApp.NetworkingError"
 public let MissingHTTPResponseError = 100
 public let UnexpectedResponseError = 200

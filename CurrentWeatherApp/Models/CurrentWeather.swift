@@ -6,30 +6,33 @@
 //
 
 import Foundation
-import UIKit
-
-struct CurrentWeather {
-  let temperature: Double
-  let city: String
-}
-
-extension CurrentWeather: JSONDecodable {
-  init?(JSON: [String : AnyObject]) {
-    guard let temperature = JSON["temperature"] as? Double,
-    let city = JSON["city"] as? String else {
-        return nil
-    }
-
-    self.temperature = temperature
-    self.city = city
-  }
-}
 
 
-extension CurrentWeather {
+struct CurrentWeather: Decodable {
+    let name: String
+    var weather: Weather
     
-  var temperatureString: String {
-    return "\(Int(5 / 9 * (temperature - 32)))˚C"
-  }
-  
+    private enum CodingKeys: String,CodingKey {
+        case name
+        case weather = "main"
+    }
+    
+    enum WeatherKeys: String, CodingKey {
+        case temperatue = "temp"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        name = try container.decode(String.self, forKey: .name)
+        
+        let weatherContainer = try container.nestedContainer(keyedBy: WeatherKeys.self, forKey: .weather)
+        let temperature = try weatherContainer.decode(Double.self, forKey: .temperatue)
+        weather = Weather(city: name, temperature: temperature)
+    }
+}
+
+struct Weather: Decodable {
+    let city: String
+    let temperature: Double
 }

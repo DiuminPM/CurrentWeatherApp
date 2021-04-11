@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
             NavigationView {
                 
@@ -24,7 +25,9 @@ struct ContentView: View {
                 })
                 .toolbar {
                        ToolbarItem(placement: .navigationBarTrailing) {
-                               Button(action: {}) {
+                        Button(action: {
+                            
+                        }) {
                                    Image(systemName: "location.circle")
                                 }
                        }
@@ -37,6 +40,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(SearchViewModel())
     }
 }

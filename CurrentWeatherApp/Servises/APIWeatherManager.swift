@@ -12,34 +12,15 @@ struct Coordinates {
   let longitude: Double
 }
 
-enum ForecastType: FinalURLPoint {
-  case CurrentCity(apiKey: String, city: String)
-  case CurrentCoordinates(apiKey: String, coordinates: Coordinates)
 
   
-  var baseURL: URL {
-    return URL(string: "api.openweathermap.org/data/2.5")!
-  }
-  
-  var path: String {
-    switch self {
-    case .CurrentCity(let apiKey, let city):
-        return "/weather?q=\(city)&appid=\(apiKey)"
-//      return "/forecast/\(apiKey)/\(coordinates.latitude),\(coordinates.longitude)"
-    case .CurrentCoordinates(let apiKey, let coordinates):
-        return "/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(apiKey)"
-    }
-  }
-  
-  var request: URLRequest {
-    let url = URL(string: path, relativeTo: baseURL)
-    return URLRequest(url: url!)
-  }
-}
+//    api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+let url = URL(string: "api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}")
 
 
 
 final class APIWeatherManager: APIManager {
+  let url = URL(string: "api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}")
   var sessionConfiguration: URLSessionConfiguration
 
   lazy var session: URLSession = {
@@ -57,24 +38,11 @@ final class APIWeatherManager: APIManager {
     self.init(sessionConfiguration: URLSessionConfiguration.default, apiKey: apiKey)
   }
   
-  func fetchCurrentWeatherCoordinatesWith(coordinates: Coordinates, completionHandler: @escaping (APIResult<CurrentWeather>) -> Void) {
-    let request = ForecastType.CurrentCoordinates(apiKey: self.apiKey, coordinates: coordinates).request
+  func fetchCurrentWeatherWith(coordinates: Coordinates, completionHandler: @escaping (APIResult<CurrentWeather>) -> Void) {
+    let request = ForecastType.Current(apiKey: self.apiKey, coordinates: coordinates).request
     
     fetch(request: request, parse: { (json) -> CurrentWeather? in
-      if let dictionary = json["currently"] as? [String: AnyObject] {
-        return CurrentWeather(JSON: dictionary)
-      } else {
-        return nil
-      }
-      
-      }, completionHandler: completionHandler)
-  }
-    
-    func fetchCurrentWeatherCityWith(city: String, completionHandler: @escaping (APIResult<CurrentWeather>) -> Void) {
-    let request = ForecastType.CurrentCity(apiKey: self.apiKey, city: city).request
-    
-    fetch(request: request, parse: { (json) -> CurrentWeather? in
-      if let dictionary = json["currently"] as? [String: AnyObject] {
+      if let dictionary = json["main"] as? [String: AnyObject] {
         return CurrentWeather(JSON: dictionary)
       } else {
         return nil
