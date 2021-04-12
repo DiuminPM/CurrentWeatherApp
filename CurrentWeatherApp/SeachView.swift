@@ -10,9 +10,9 @@ import CoreLocation
 
 struct SeachView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
-    @State var toggleValue: Bool = false
-    @State var currentCity: String = "Stuttgard"
-    @State var currentTemperature: Double = 0
+    @Binding var toggleValue: Bool
+    @Binding var currentCity: String
+    @Binding var currentTemperature: Double
 //    @StateObject var searchViewModel = SearchViewModel()
 //
 //    @ObservedObject var dataWeather = SearchViewModel()
@@ -36,11 +36,6 @@ struct SeachView: View {
     }
 }
 
-struct SeachView_Previews: PreviewProvider {
-    static var previews: some View {
-        SeachView()
-    }
-}
 
 struct SearschContentView: View {
     @Binding var search: String
@@ -124,7 +119,7 @@ struct Cell: View {
     let weather: WeatherViewModel
     var body: some View {
         VStack (alignment: .leading, spacing: 8){
-            Text("\(weather.city), \(weather.temperature)˚F")
+            Text("\(weather.city), \(Int(weather.temperature))˚F")
                 Text("\(CurrentData.dateFormatter())")
             }
     }
@@ -137,10 +132,14 @@ struct ToolBarButton: View {
     @StateObject var locationView = LocationViewModel()
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @StateObject var searchViewModel = SearchViewModel()
+    @Binding var city: String
+    @Binding var temperature: Double
     var body: some View {
         Button(action: {
             addWeatherVM.saveByCoordinates(coordinates: Coordinates(latitude: locationView.userLatitude, longitude: locationView.userLongitude)) { (weather) in
-                <#code#>
+                self.temperature = weather.temperature
+                self.city = weather.city
+                searchViewModel.addWeather(weather)
             }
             print("проверка \(locationView.userLatitude)")
         }) {

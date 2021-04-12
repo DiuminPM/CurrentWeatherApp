@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var addWeatherVM = AddWeatherViewModel()
+    @State var toggleValue: Bool = false
+    @State var currentCity: String = "Stuttgard"
+    @State var currentTemperature: Double = 0
     
     var body: some View {
             NavigationView {
                 
                 VStack {
-                    SeachView()
+                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature)
                     
                 }
                 .multilineTextAlignment(.leading)
@@ -25,7 +29,7 @@ struct ContentView: View {
                 })
                 .toolbar {
                        ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolBarButton()
+                        ToolBarButton(city: $currentCity, temperature: $currentTemperature)
                        }
                }
             }
