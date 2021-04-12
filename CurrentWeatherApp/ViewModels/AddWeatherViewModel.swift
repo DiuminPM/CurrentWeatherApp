@@ -7,7 +7,8 @@
 
 import Foundation
 class AddWeatherViewModel: ObservableObject {
-    var city: String = "Paris"
+    var city: String = ""
+    
     func save(completion: @escaping (WeatherViewModel) -> Void) {
         CurrenWeatherAPIManager().getWeatherByCity(city: city) { (result) in
             switch result {
@@ -21,6 +22,21 @@ class AddWeatherViewModel: ObservableObject {
         }
         
     }
+    
+    func saveByCoordinates(coordinates: Coordinates,completion: @escaping (WeatherViewModel) -> Void) {
+        CurrenWeatherAPIManager().getWeatherByCoordinates(coordinates: coordinates) { (result) in
+            switch result {
+            case .success(let weather):
+                DispatchQueue.main.async {
+                    completion(WeatherViewModel(weather: weather))
+                }
+            case .failure(let error):
+                print(error, "опачки")
+            }
+        }
+        
+    }
+    
     func switchUnits(temperature: Double, toggleValue: Bool) -> Double {
         let selectedUnit: Double?
         if toggleValue == true { selectedUnit = temperature - 273}

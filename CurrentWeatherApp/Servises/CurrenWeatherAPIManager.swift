@@ -35,4 +35,25 @@ class CurrenWeatherAPIManager {
         }.resume()
     }
     
+    func getWeatherByCoordinates(coordinates: Coordinates, completion: @escaping ((Result<Weather, NetworkError>) -> Void)) {
+        
+        guard let weatherURL = Constants.UrlAPI.weatherByCoordinates(coordinates: coordinates) else {
+            return completion(.failure(.badURL))
+        }
+        
+        URLSession.shared.dataTask(with: weatherURL) { (data, _, error) in
+            
+            guard let data = data, error == nil else {
+                return completion(.failure(.noData))
+            }
+            let weatherResponse = try? JSONDecoder().decode(CurrentWeather.self, from: data)
+            
+            if let weatherResponse = weatherResponse {
+                completion(.success(weatherResponse.weather))
+                print(weatherResponse)
+            }
+            
+        }.resume()
+    }
+    
 }

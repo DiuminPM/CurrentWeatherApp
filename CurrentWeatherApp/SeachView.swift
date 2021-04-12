@@ -13,10 +13,10 @@ struct SeachView: View {
     @State var toggleValue: Bool = false
     @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
-    @StateObject var searchViewModel = SearchViewModel()
-    
-    @ObservedObject var dataWeather = SearchViewModel()
-    
+//    @StateObject var searchViewModel = SearchViewModel()
+//
+//    @ObservedObject var dataWeather = SearchViewModel()
+//
 
 //    var currentCity = "Stuttgard"
    
@@ -118,7 +118,6 @@ struct LabelCurrentCity: View {
     }
 }
 
-
 struct Cell: View {
 //    @Binding var currentCity: String
 //    @Binding var temperature: Int
@@ -131,3 +130,23 @@ struct Cell: View {
     }
 
 }
+
+struct ToolBarButton: View {
+//    @Binding var currentCity: String
+//    @Binding var temperature: Int
+    @StateObject var locationView = LocationViewModel()
+    @StateObject var addWeatherVM = AddWeatherViewModel()
+    @StateObject var searchViewModel = SearchViewModel()
+    var body: some View {
+        Button(action: {
+            addWeatherVM.saveByCoordinates(coordinates: Coordinates(latitude: locationView.userLatitude, longitude: locationView.userLongitude)) { (weather) in
+                <#code#>
+            }
+            print("проверка \(locationView.userLatitude)")
+        }) {
+                   Image(systemName: "location.circle")
+                }
+    }
+
+}
+

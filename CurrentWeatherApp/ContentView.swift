@@ -25,11 +25,7 @@ struct ContentView: View {
                 })
                 .toolbar {
                        ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            
-                        }) {
-                                   Image(systemName: "location.circle")
-                                }
+                        ToolBarButton()
                        }
                }
             }
