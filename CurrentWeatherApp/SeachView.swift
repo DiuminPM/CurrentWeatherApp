@@ -13,6 +13,7 @@ struct SeachView: View {
     @State var toggleValue: Bool = false
     @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
+    @StateObject var searchViewModel = SearchViewModel()
     
     @ObservedObject var dataWeather = SearchViewModel()
     
@@ -27,11 +28,11 @@ struct SeachView: View {
         VStack() {
             SearschContentView(search: $addWeatherVM.city, city: $currentCity, temperature: $currentTemperature)
             LabelCurrentCity(toggleValue: $toggleValue, currentCity: currentCity, currentTemperature: addWeatherVM.switchUnits(temperature: currentTemperature, toggleValue: toggleValue))
-//            List {ForEach(dataWeather.weathers, id: \.id)  { weather in
-//                Cell(currentCity: $currentCity, temperature: $currentTemperature)
-//                }
-//            }
-//            .listStyle(PlainListStyle())
+            List {ForEach(SearchViewModel.weathers, id: \.id)  { weather in
+                Cell(weather: weather)
+                }
+            }
+            .listStyle(PlainListStyle())
     }
 }
 
@@ -62,6 +63,8 @@ struct SearschContentView: View {
                 addWeatherVM.save { (weather) in
                     self.temperature = weather.temperature
                     self.city = weather.city
+                    searchViewModel.addWeather(weather)
+                    addWeatherVM.city = ""
                 }
 //                searchViewModel.fetchWeathers()
             }
@@ -81,6 +84,7 @@ struct LabelCurrentCity: View {
     @Binding var toggleValue: Bool
     var currentCity: String
     var currentTemperature: Double
+    @StateObject var addWeatherVM = AddWeatherViewModel()
     var body: some View {
         VStack{
             HStack {
@@ -109,20 +113,21 @@ struct LabelCurrentCity: View {
             } .padding()
         }
         .frame(height: 150)
-        .background(Color(#colorLiteral(red: 0.07280416042, green: 0.7571062446, blue: 0.9571402669, alpha: 1)))
+        .background(Color(addWeatherVM.colorCurrentContent(temperature: currentTemperature, toggleValue: toggleValue)))
         
     }
 }
 
 
-//struct Cell: View {
+struct Cell: View {
 //    @Binding var currentCity: String
 //    @Binding var temperature: Int
-//    var body: some View {
-//        VStack (alignment: .leading, spacing: 8){
-//            Text("\(currentCity), \(temperature)˚F")
-//                Text("\(CurrentData.dateFormatter())")
-//            }
-//    }
-//
-//}
+    let weather: WeatherViewModel
+    var body: some View {
+        VStack (alignment: .leading, spacing: 8){
+            Text("\(weather.city), \(weather.temperature)˚F")
+                Text("\(CurrentData.dateFormatter())")
+            }
+    }
+
+}
