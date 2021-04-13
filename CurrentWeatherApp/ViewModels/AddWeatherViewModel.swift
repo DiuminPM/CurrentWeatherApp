@@ -37,37 +37,30 @@ class AddWeatherViewModel: ObservableObject {
         
     }
     
-    func switchUnits(temperature: Double, toggleValue: Bool) -> Double {
-        let selectedUnit: Double?
-        if toggleValue == true { selectedUnit = temperature - 273}
-        else {selectedUnit = temperature}
+//    func switchUnits(temperature: Double, toggleValue: Bool) -> Double {
+//        let selectedUnit: Double?
+//        if toggleValue == true { selectedUnit = temperature - 273}
+//        else {selectedUnit = temperature}
+//        return selectedUnit!
+//
+//    }
+    func switchUnits(temperature: Double, toggleValue: Bool) -> String {
+        let selectedUnit: String?
+        if toggleValue == true { selectedUnit = "\(Int(temperature) - 273)˚ C"}
+        else {selectedUnit = "\(Int(temperature))˚ F"}
         return selectedUnit!
             
     }
     func colorCurrentContent(temperature: Double, toggleValue: Bool) -> String {
-        switch toggleValue {
-        case true:
-            switch temperature {
-            case ...9:
-                    return "Light blue"
-            case 10...24:
-                    return "orange"
-            case 25...:
-                    return "red"
-            default:
-                return "white"
-            }
-        case false:
-            switch temperature {
-            case ...282:
-                    return "Light blue"
-            case 283...297:
-                    return "orange"
-            case 298...:
-                    return "red"
-            default:
-                return "white"
-            }
+        switch temperature {
+        case ...282:
+                return "Light blue"
+        case 283...297:
+                return "orange"
+        case 298...:
+                return "red"
+        default:
+            return "white"
         }
     }
 }

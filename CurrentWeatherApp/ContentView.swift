@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @State var toggleValue: Bool = false
     @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
+    func getContext() -> NSManagedObjectContext {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        return context
+    }
     
     var body: some View {
             NavigationView {
@@ -32,6 +38,16 @@ struct ContentView: View {
                         ToolBarButton(city: $currentCity, temperature: $currentTemperature)
                        }
                }
+            } .onAppear{
+                let context = getContext()
+                let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
+                do {
+                    SearchViewModel.weathersCore = try context.fetch(fetchRequest)
+                    
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+                print("проверка\(SearchViewModel.weathersCore)")
             }
         }
         

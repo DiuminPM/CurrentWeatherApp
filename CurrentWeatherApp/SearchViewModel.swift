@@ -25,18 +25,18 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     static var weathers: [WeatherViewModel] = []
     static var weathersCore: [WeatherCore] = []
     
-    override init() {
-        super.init()
-        let context = getContext()
-        let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
-        do {
-            SearchViewModel.weathersCore = try context.fetch(fetchRequest)
-            
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-        
-    }
+//    override init() {
+//        super.init()
+//        let context = getContext()
+//        let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
+//        do {
+//            SearchViewModel.weathersCore = try context.fetch(fetchRequest)
+//
+//        } catch let error as NSError {
+//            print(error.localizedDescription)
+//        }
+//        print("проверка\(SearchViewModel.weathersCore)")
+//    }
     
     func fetchWeathers() {
         
@@ -51,7 +51,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     
     func addWeather(_ weather: WeatherViewModel) {
         SearchViewModel.weathers.append(weather)
-        print(SearchViewModel.weathers)
+        print("проверка\(SearchViewModel.weathers)")
     }
     func saveWeatherCore (with city: String, with temperature: Double) {
         
@@ -62,10 +62,12 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         let weatherObject = WeatherCore(entity: entity, insertInto: context)
         weatherObject.city = city
         weatherObject.temperature = temperature
+        weatherObject.id = UUID()
         
         do {
             try context.save()
             SearchViewModel.weathersCore.append(weatherObject)
+            print(SearchViewModel.weathersCore)
         } catch let error as NSError {
             print(error.localizedDescription)
         }
