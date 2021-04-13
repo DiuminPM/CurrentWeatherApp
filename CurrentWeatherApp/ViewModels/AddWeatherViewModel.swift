@@ -53,9 +53,9 @@ class AddWeatherViewModel: ObservableObject {
     }
     func colorCurrentContent(temperature: Double, toggleValue: Bool) -> String {
         switch temperature {
-        case ...282:
+        case ..<283:
                 return "Light blue"
-        case 283...297:
+        case 283..<298:
                 return "orange"
         case 298...:
                 return "red"

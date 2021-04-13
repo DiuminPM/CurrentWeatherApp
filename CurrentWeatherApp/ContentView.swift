@@ -13,6 +13,8 @@ struct ContentView: View {
     @State var toggleValue: Bool = false
     @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
+    @State var isPresenter: Bool = false
+    
     func getContext() -> NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
@@ -23,9 +25,11 @@ struct ContentView: View {
             NavigationView {
                 
                 VStack {
-                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature)
+                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter)
+                    
                     
                 }
+                .sheet(isPresented: $isPresenter, content: {DetailWeatherCityView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter)} )
                 .multilineTextAlignment(.leading)
                 .navigationBarTitle(Text("Weather"), displayMode: .inline)
                 .onAppear(perform: {
@@ -38,7 +42,9 @@ struct ContentView: View {
                         ToolBarButton(city: $currentCity, temperature: $currentTemperature)
                        }
                }
-            } .onAppear{
+            }
+            
+            .onAppear{
                 let context = getContext()
                 let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
                 do {
@@ -48,6 +54,7 @@ struct ContentView: View {
                     print(error.localizedDescription)
                 }
                 print("проверка\(SearchViewModel.weathersCore)")
+                
             }
         }
         

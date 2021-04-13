@@ -24,6 +24,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     var currentCity: String = ""
     static var weathers: [WeatherViewModel] = []
     static var weathersCore: [WeatherCore] = []
+    static var cityWeathers: [WeatherCore] = []
     
 //    override init() {
 //        super.init()
@@ -71,6 +72,15 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
+    }
+    
+    func addCityWheater (currentCity: String) {
+        SearchViewModel.cityWeathers = SearchViewModel.weathersCore.filter({ (weather) -> Bool in
+            if  weather.city == currentCity {
+                return true
+            }
+            return false
+        })
     }
 }
 //addWeatherVM.save { (weather) in
