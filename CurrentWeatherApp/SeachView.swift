@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreLocation
 import CoreData
+import SwiftUICharts
 
 struct SeachView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
@@ -16,7 +17,7 @@ struct SeachView: View {
     @Binding var currentCity: String
     @Binding var currentTemperature: Double
     @Binding var isPresenter: Bool
-    @State var shouldHide = true
+    @State var shouldHide = false
     @State var cityWeathers = []
     
     var body: some View {
@@ -30,8 +31,8 @@ struct SeachView: View {
                         if !self.$shouldHide.wrappedValue {
                             Button(action: {
                                 searchViewModel.addCityWheater(currentCity: weather.city!)
-                                print(SearchViewModel.cityWeathers)
                                 isPresenter.toggle()
+                                
                             }) {
                                        Image(systemName: "doc.text.magnifyingglass")
                     
@@ -41,23 +42,11 @@ struct SeachView: View {
                         }
                     .onAppear(perform: {
                         
-                        self.cityWeathers = SearchViewModel.weathersCore.filter({ (cityWeather) -> Bool in
-                            if  cityWeather.city == weather.city! {
-                                return true
-                            }
-                            return false
-                        })
-                        print("проверка \(cityWeathers.count)")
-                        if cityWeathers.count > 1 {
-                            shouldHide = false
-                        }
                         
                     })
-                
-                    }
                 }
-            .listStyle(PlainListStyle())
-            
+            }
+        .listStyle(PlainListStyle())
             .onAppear{
                 
             }
@@ -145,6 +134,7 @@ struct LabelCurrentCity: View {
 
 struct DetailWeatherCityView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
+    @StateObject var searchViewModel = SearchViewModel()
     @Binding var toggleValue: Bool
     @Binding var currentCity: String
     @Binding var currentTemperature: Double
@@ -152,11 +142,15 @@ struct DetailWeatherCityView: View {
     
     var body: some View {
         VStack() {
+            LineChartView(data: SearchViewModel.temperaturesForCharts, title: "Temperature values")
             List {ForEach(SearchViewModel.cityWeathers, id: \.id)  { weather in
                 DetailCell(isPresenter: $isPresenter, toggleValue: $toggleValue, weather: weather)
                 }
             }
             .listStyle(PlainListStyle())
+        }
+        .onAppear{
+            searchViewModel.addTemperaturesForChart()
         }
     }
 }
@@ -220,7 +214,9 @@ struct ToolBarButton: View {
                 self.city = weather.city
                 searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature)
             }
-            print("проверка \(locationView.userLatitude)")
+            searchViewModel.makedCityList()
+            print("проверка\(SearchViewModel.cityList)")
+            searchViewModel.makedCityList()
         }) {
                    Image(systemName: "location.circle")
                 }

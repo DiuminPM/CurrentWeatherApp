@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
     @State var isPresenter: Bool = false
+    @StateObject var searchViewModel = SearchViewModel()
     
     func getContext() -> NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -45,14 +46,40 @@ struct ContentView: View {
             }
             
             .onAppear{
+                //        let context = getContext()
+                //        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+                //        if let objects = try? context.fetch(fetchRequest) {
+                //            for object in objects {
+                //                context.delete(object)
+                //            }
+                //        }
+                //
+                //        do {
+                //            try context.save()
+                //        } catch let error as NSError {
+                //            print(error.localizedDescription)
+                //        }
+                
                 let context = getContext()
                 let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
+//                if let objects = try? context.fetch(fetchRequest) {
+//                            for object in objects {
+//                                context.delete(object)
+//                            }
+//                        }
+//                
+//                        do {
+//                            try context.save()
+//                        } catch let error as NSError {
+//                            print(error.localizedDescription)
+//                        }
                 do {
                     SearchViewModel.weathersCore = try context.fetch(fetchRequest)
                     
                 } catch let error as NSError {
                     print(error.localizedDescription)
                 }
+                
                 print("проверка\(SearchViewModel.weathersCore)")
                 
             }

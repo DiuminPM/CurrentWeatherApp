@@ -25,6 +25,8 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     static var weathers: [WeatherViewModel] = []
     static var weathersCore: [WeatherCore] = []
     static var cityWeathers: [WeatherCore] = []
+    static var temperaturesForCharts: [Double] = []
+    static var cityList: [WeatherCore] = []
     
 //    override init() {
 //        super.init()
@@ -68,7 +70,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         do {
             try context.save()
             SearchViewModel.weathersCore.append(weatherObject)
-            print(SearchViewModel.weathersCore)
+            
         } catch let error as NSError {
             print(error.localizedDescription)
         }
@@ -82,7 +84,32 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
             return false
         })
     }
+    
+    func addTemperaturesForChart() {
+        for weather in SearchViewModel.cityWeathers {
+            SearchViewModel.temperaturesForCharts.append(weather.temperature)
+        }
+    }
+    
+    func makedCityList() {
+//        for i in 0..<SearchViewModel.weathersCore.count {
+//            for weather in SearchViewModel.weathersCore {
+//                if SearchViewModel.weathersCore[i].city != weather.city {
+//                    SearchViewModel.cityList.append(SearchViewModel.weathersCore[i])
+//                }
+//            }
+//        for cityList in SearchViewModel.weathersCore {
+//            SearchViewModel.cityList = SearchViewModel.weathersCore.filter({ (cityCore) -> Bool in
+//                if cityCore.city! != cityList.city{return true}
+//                return false
+//            })
+//
+//        print("ух")
+
+//        }
+        
+        
+    }
+    
+    
 }
-//addWeatherVM.save { (weather) in
-//    store.addWeather(weather)
-//    self.currentCity = weather.city

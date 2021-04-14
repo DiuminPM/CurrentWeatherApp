@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,6 +25,7 @@
 		1FAEB2D226223FC9006B47FE /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAEB2D126223FC9006B47FE /* WeatherViewModel.swift */; };
 		1FAEB2D726224EF7006B47FE /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAEB2D626224EF7006B47FE /* UserDefaultsStore.swift */; };
 		1FAEB2DF26234A84006B47FE /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAEB2DE26234A84006B47FE /* SearchViewModel.swift */; };
+		1FDA641326273D0800F2D550 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 1FDA641226273D0800F2D550 /* SwiftUICharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FDA641326273D0800F2D550 /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +161,9 @@
 			dependencies = (
 			);
 			name = CurrentWeatherApp;
+			packageProductDependencies = (
+				1FDA641226273D0800F2D550 /* SwiftUICharts */,
+			);
 			productName = CurrentWeatherApp;
 			productReference = 1FA3EAA126209F6900B02D05 /* CurrentWeatherApp.app */;
 			productType = "com.apple.product-type.application";
@@ -186,6 +191,9 @@
 				Base,
 			);
 			mainGroup = 1FA3EA9826209F6900B02D05;
+			packageReferences = (
+				1FDA641126273D0800F2D550 /* XCRemoteSwiftPackageReference "ChartView" */,
+			);
 			productRefGroup = 1FA3EAA226209F6900B02D05 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -425,6 +433,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1FDA641126273D0800F2D550 /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1FDA641226273D0800F2D550 /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1FDA641126273D0800F2D550 /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		1FA3EAAA26209F6900B02D05 /* CurrentWeatherApp.xcdatamodeld */ = {
