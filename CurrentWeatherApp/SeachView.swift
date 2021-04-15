@@ -18,40 +18,33 @@ struct SeachView: View {
     @Binding var currentTemperature: Double
     @Binding var isPresenter: Bool
     @State var shouldHide = false
-    @State var cityWeathers = []
+    @Binding var countWeatherList: Int
+    @Binding var isHide: Bool
+
     
     var body: some View {
         VStack() {
             SearschContentView(search: $addWeatherVM.city, city: $currentCity, temperature: $currentTemperature)
-            LabelCurrentCity(toggleValue: $toggleValue, currentCity: currentCity, currentTemperature: $currentTemperature)
+            LabelCurrentCity(toggleUnitsValue: $toggleValue, currentCity: currentCity, currentTemperature: $currentTemperature)
             List {ForEach(SearchViewModel.weathersCore, id: \.id)  { weather in
                     HStack{
-                        Cell(isPresenter: $isPresenter, toggleValue: $toggleValue, weather: weather)
+                        Cell(toggleValue: $toggleValue, weather: weather, isHide: $isHide, countWeatherList: $countWeatherList)
                         Spacer()
                         if !self.$shouldHide.wrappedValue {
                             Button(action: {
                                 searchViewModel.addCityWheater(currentCity: weather.city!)
                                 isPresenter.toggle()
-                                
-                            }) {
-                                       Image(systemName: "doc.text.magnifyingglass")
-                    
-                                    }
-                            }
-
+                            }) { Image(systemName: "doc.text.magnifyingglass") }
                         }
-                    .onAppear(perform: {
-                        
-                        
-                    })
+                    }
+                
                 }
             }
-        .listStyle(PlainListStyle())
+            .listStyle(PlainListStyle())
             .onAppear{
                 
             }
     }
-        
 }
 
 
@@ -68,19 +61,17 @@ struct SearschContentView: View {
                 .resizable()
                 .frame(width: 20, height: 20)
                 .foregroundColor(Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
-                .padding(15)
-            TextField("search city", text: $addWeatherVM.city)
+                .padding(10)
+            TextField("City name", text: $addWeatherVM.city)
             {isEditing in
                 self.isEditing = isEditing}
             onCommit: {
                 addWeatherVM.save { (weather) in
                     self.temperature = weather.temperature
                     self.city = weather.city
-                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature)
-//                    searchViewModel.addWeather(weather)
-                    addWeatherVM.city = ""
+                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
+                    
                 }
-//                searchViewModel.fetchWeathers()
             }
                 .font(.system(size: 18, weight: .medium))
                 .foregroundColor(Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
@@ -88,17 +79,16 @@ struct SearschContentView: View {
         .frame(height: 40, alignment: .center)
         .background(Color(#colorLiteral(red: 0.02182334103, green: 0.005694539752, blue: 0.02355073579, alpha: 0.07800747701)))
         .cornerRadius(10)
-//        .shadow(color: Color(.black).opacity(0.6), radius: 4, x: 3, y: 3)
         .padding()
         }
     }
 }
 
 struct LabelCurrentCity: View {
-    @Binding var toggleValue: Bool
+    @StateObject var addWeatherVM = AddWeatherViewModel()
+    @Binding var toggleUnitsValue: Bool
     var currentCity: String
     @Binding var currentTemperature: Double
-    @StateObject var addWeatherVM = AddWeatherViewModel()
     var body: some View {
         VStack{
             HStack {
@@ -109,9 +99,9 @@ struct LabelCurrentCity: View {
             } .padding()
             HStack (alignment: .center){
                 
-                Toggle(isOn: $toggleValue) {
+                Toggle(isOn: $toggleUnitsValue) {
                     HStack{
-                        Text("\(addWeatherVM.switchUnits(temperature: currentTemperature, toggleValue: toggleValue))")
+                        Text("\(addWeatherVM.switchUnits(temperature: currentTemperature, toggleValue: toggleUnitsValue))")
                             .font(.system(size: 26))
                             .foregroundColor(.black)
                         Spacer()
@@ -127,99 +117,91 @@ struct LabelCurrentCity: View {
             } .padding()
         }
         .frame(height: 150)
-        .background(Color(addWeatherVM.colorCurrentContent(temperature: currentTemperature, toggleValue: toggleValue)))
+        .background(Color(addWeatherVM.colorCurrentContent(temperature: currentTemperature, toggleValue: toggleUnitsValue)))
         
     }
 }
 
 struct DetailWeatherCityView: View {
-    @StateObject var addWeatherVM = AddWeatherViewModel()
     @StateObject var searchViewModel = SearchViewModel()
-    @Binding var toggleValue: Bool
-    @Binding var currentCity: String
-    @Binding var currentTemperature: Double
+    @Binding var toggleUnitsTemp: Bool
     @Binding var isPresenter: Bool
+    @Binding var countWeatherList: Int
+    @Binding var isHide: Bool
     
     var body: some View {
         VStack() {
-            LineChartView(data: SearchViewModel.temperaturesForCharts, title: "Temperature values")
+            LineView(data: SearchViewModel.temperaturesForCharts)
+                .padding()
             List {ForEach(SearchViewModel.cityWeathers, id: \.id)  { weather in
-                DetailCell(isPresenter: $isPresenter, toggleValue: $toggleValue, weather: weather)
+                DetailCell(toggleValue: $toggleUnitsTemp, weather: weather)
                 }
             }
             .listStyle(PlainListStyle())
         }
         .onAppear{
+            countWeatherList = SearchViewModel.cityWeathers.count
             searchViewModel.addTemperaturesForChart()
+            print(countWeatherList)
         }
     }
 }
 
 struct Cell: View {
-//    @Binding var currentCity: String
-    @Binding var isPresenter: Bool
     @Binding var toggleValue: Bool
     @StateObject var addWeatherVM = AddWeatherViewModel()
-    @StateObject var searchViewModel = SearchViewModel()
-    var cityWeathers: [WeatherCore] = []
     let weather: WeatherCore
+    @Binding var isHide: Bool
+    @Binding var countWeatherList: Int
+
     
     var body: some View {
         HStack{
             VStack (alignment: .leading, spacing: 8){
                 Text("\(weather.city!), \(addWeatherVM.switchUnits(temperature: weather.temperature, toggleValue: toggleValue))")
-                    Text("\(CurrentData.dateFormatter())")
+                Text("\(weather.date!)")
+                Text("\(String(countWeatherList))")
                 }
-            
-            
-            
-            
-            
-            
+        }
+        .onAppear{
+            countWeatherList = SearchViewModel.weathersCore.count
+            print(countWeatherList)
         }
     }
 
 }
 
 struct DetailCell: View {
-//    @Binding var currentCity: String
-    @Binding var isPresenter: Bool
     @Binding var toggleValue: Bool
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @StateObject var searchViewModel = SearchViewModel()
-    var cityWeathers: [WeatherCore] = []
     let weather: WeatherCore
     
     var body: some View {
             VStack (alignment: .leading, spacing: 8){
                 Text("\(weather.city!), \(addWeatherVM.switchUnits(temperature: weather.temperature, toggleValue: toggleValue))")
-                    Text("\(CurrentData.dateFormatter())")
+                Text("\(weather.date!)")
                 }
     }
 
 }
 
 struct ToolBarButton: View {
-//    @Binding var currentCity: String
-//    @Binding var temperature: Int
+    @Binding var currentCity: String
+    @Binding var temperature: Double
     @StateObject var locationView = LocationViewModel()
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @StateObject var searchViewModel = SearchViewModel()
-    @Binding var city: String
-    @Binding var temperature: Double
     var body: some View {
         Button(action: {
             addWeatherVM.saveByCoordinates(coordinates: Coordinates(latitude: locationView.userLatitude, longitude: locationView.userLongitude)) { (weather) in
+                searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
                 self.temperature = weather.temperature
-                self.city = weather.city
-                searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature)
+                self.currentCity = weather.city
+                searchViewModel.makedCityList()
             }
-            searchViewModel.makedCityList()
-            print("проверка\(SearchViewModel.cityList)")
-            searchViewModel.makedCityList()
-        }) {
-                   Image(systemName: "location.circle")
-                }
+        })
+        { Image(systemName: "location.circle") }
     }
 
 }

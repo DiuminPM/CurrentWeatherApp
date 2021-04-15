@@ -26,7 +26,11 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     static var weathersCore: [WeatherCore] = []
     static var cityWeathers: [WeatherCore] = []
     static var temperaturesForCharts: [Double] = []
-    static var cityList: [WeatherCore] = []
+    static var cityList: [String] = []
+    static var unicalyWeatherList: [CityList] = []
+    
+    typealias CityList = (String, [WeatherCore])
+//    static var cityList: [WeatherCore] = []
     
 //    override init() {
 //        super.init()
@@ -56,7 +60,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         SearchViewModel.weathers.append(weather)
         print("проверка\(SearchViewModel.weathers)")
     }
-    func saveWeatherCore (with city: String, with temperature: Double) {
+    func saveWeatherCore (with city: String?, with temperature: Double?, with date: String?) {
         
         let context = getContext()
         
@@ -64,12 +68,13 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         
         let weatherObject = WeatherCore(entity: entity, insertInto: context)
         weatherObject.city = city
-        weatherObject.temperature = temperature
+        weatherObject.temperature = temperature!
         weatherObject.id = UUID()
+        weatherObject.date = date
         
         do {
             try context.save()
-            SearchViewModel.weathersCore.append(weatherObject)
+            SearchViewModel.weathersCore.insert(weatherObject, at: 0)
             
         } catch let error as NSError {
             print(error.localizedDescription)
@@ -77,11 +82,18 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     }
     
     func addCityWheater (currentCity: String) {
-        SearchViewModel.cityWeathers = SearchViewModel.weathersCore.filter({ (weather) -> Bool in
+        var cityList: [WeatherCore] = []
+        cityList = SearchViewModel.weathersCore.filter({ (weather) -> Bool in
             if  weather.city == currentCity {
                 return true
             }
             return false
+        })
+        SearchViewModel.cityWeathers = cityList.sorted(by: { (s1, s2) -> Bool in
+            if s1.date! < s2.date! {
+                return false
+            }
+            return true
         })
     }
     
@@ -90,8 +102,28 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
             SearchViewModel.temperaturesForCharts.append(weather.temperature)
         }
     }
+    func distinct<T: Equatable>(source: [T]) -> [T] {
+      var unique = [T]()
+      for item in source {
+        if !unique.contains(item) {
+          unique.append(item)
+        }
+      }
+      return unique
+    }
     
     func makedCityList() {
+        for weatherList in SearchViewModel.weathersCore {
+            SearchViewModel.cityList.append(weatherList.city!)
+        }
+        let uniqueCity = distinct(source: SearchViewModel.cityList)
+        let uniqueCityList = uniqueCity.map{ (list) -> CityList in
+            return (list, SearchViewModel.weathersCore.filter({ (word) -> Bool in
+                String((word.city)!) == list
+            }))
+        }
+        SearchViewModel.unicalyWeatherList = uniqueCityList
+        print(uniqueCityList.count)
 //        for i in 0..<SearchViewModel.weathersCore.count {
 //            for weather in SearchViewModel.weathersCore {
 //                if SearchViewModel.weathersCore[i].city != weather.city {

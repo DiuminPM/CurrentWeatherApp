@@ -11,9 +11,11 @@ import CoreData
 struct ContentView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @State var toggleValue: Bool = false
-    @State var currentCity: String = "Stuttgard"
+    @State var currentCity: String = "Petrozavodsk"
     @State var currentTemperature: Double = 0
     @State var isPresenter: Bool = false
+    @State var countWeatherList: Int = 0
+    @State var isHide: Bool = true
     @StateObject var searchViewModel = SearchViewModel()
     
     func getContext() -> NSManagedObjectContext {
@@ -21,71 +23,64 @@ struct ContentView: View {
         let context = appDelegate.persistentContainer.viewContext
         return context
     }
-    
     var body: some View {
             NavigationView {
-                
                 VStack {
-                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter)
-                    
-                    
+                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter, countWeatherList: $countWeatherList, isHide: $isHide)
                 }
-                .sheet(isPresented: $isPresenter, content: {DetailWeatherCityView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter)} )
+                .sheet(isPresented: $isPresenter, content: {DetailWeatherCityView(toggleUnitsTemp: $toggleValue, isPresenter: $isPresenter, countWeatherList: $countWeatherList, isHide: $isHide)} )
                 .multilineTextAlignment(.leading)
                 .navigationBarTitle(Text("Weather"), displayMode: .inline)
                 .onAppear(perform: {
                     UINavigationBar.appearance().standardAppearance.shadowColor = .clear
-//                    newAppearance.configureWithOpaqueBackground()
-//                    newAppearance.backgroundColor = .white
                 })
                 .toolbar {
                        ToolbarItem(placement: .navigationBarTrailing) {
-                        ToolBarButton(city: $currentCity, temperature: $currentTemperature)
+                        ToolBarButton(currentCity: $currentCity, temperature: $currentTemperature)
                        }
-               }
+                }
             }
-            
             .onAppear{
-                //        let context = getContext()
-                //        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-                //        if let objects = try? context.fetch(fetchRequest) {
-                //            for object in objects {
-                //                context.delete(object)
-                //            }
-                //        }
-                //
-                //        do {
-                //            try context.save()
-                //        } catch let error as NSError {
-                //            print(error.localizedDescription)
-                //        }
-                
+                if countWeatherList > 1 {
+                    isHide = false
+                }
+                print("тута\(countWeatherList)")
+
                 let context = getContext()
                 let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
-//                if let objects = try? context.fetch(fetchRequest) {
-//                            for object in objects {
-//                                context.delete(object)
-//                            }
-//                        }
-//                
-//                        do {
-//                            try context.save()
-//                        } catch let error as NSError {
-//                            print(error.localizedDescription)
-//                        }
+                let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+                fetchRequest.sortDescriptors = [sortDescriptor]
                 do {
                     SearchViewModel.weathersCore = try context.fetch(fetchRequest)
                     
                 } catch let error as NSError {
                     print(error.localizedDescription)
                 }
+                // MARK: - start city current weather
+                addWeatherVM.city = currentCity
+                addWeatherVM.save { (weather) in
+                    self.currentTemperature = weather.temperature
+                    self.currentCity = weather.city
+                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
+                    
+                }
                 
+                // MARK: - Clear CoreData
+//                if let objects = try? context.fetch(fetchRequest) {
+//                            for object in objects {
+//                                context.delete(object)
+//                            }
+//                        }
+//
+//                        do {
+//                            try context.save()
+//                        } catch let error as NSError {
+//                            print(error.localizedDescription)
+//                        }
                 print("проверка\(SearchViewModel.weathersCore)")
                 
             }
         }
-        
-    
 }
 
 struct ContentView_Previews: PreviewProvider {

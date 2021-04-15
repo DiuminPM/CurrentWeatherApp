@@ -19,6 +19,7 @@ class AddWeatherViewModel: ObservableObject {
             case .failure(let error):
                 print(error, "опачки")
             }
+            
         }
         
     }
