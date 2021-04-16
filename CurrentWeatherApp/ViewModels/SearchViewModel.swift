@@ -36,15 +36,17 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         print(currentCity)
     }
     
-    func getContext() -> NSManagedObjectContext {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        return context
-    }
     
     func addWeather(_ weather: WeatherViewModel) {
         SearchViewModel.weathers.append(weather)
         print("проверка\(SearchViewModel.weathers)")
+    }
+    
+    // MARK: - work with CoreData
+    func getContext() -> NSManagedObjectContext {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        return context
     }
     func saveWeatherCore (with city: String?, with temperature: Double?, with date: String?) {
         
@@ -66,7 +68,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
             print(error.localizedDescription)
         }
     }
-    
+    // MARK: - work with array
     func addCityWheater (currentCity: String) {
         var cityList: [WeatherCore] = []
         cityList = SearchViewModel.weathersCore.filter({ (weather) -> Bool in

@@ -15,7 +15,6 @@ struct ContentView: View {
     @State var currentTemperature: Double = 0
     @State var isPresenter: Bool = false
     @State var countWeatherList: Int = 0
-    @State var isHide: Bool = true
     @StateObject var searchViewModel = SearchViewModel()
     
     func getContext() -> NSManagedObjectContext {
@@ -26,9 +25,9 @@ struct ContentView: View {
     var body: some View {
             NavigationView {
                 VStack {
-                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter, countWeatherList: $countWeatherList, isHide: $isHide)
+                    SeachView(toggleValue: $toggleValue, currentCity: $currentCity, currentTemperature: $currentTemperature, isPresenter: $isPresenter, countWeatherList: $countWeatherList)
                 }
-                .sheet(isPresented: $isPresenter, content: {DetailWeatherCityView(toggleUnitsTemp: $toggleValue, isPresenter: $isPresenter, countWeatherList: $countWeatherList, isHide: $isHide)} )
+                .sheet(isPresented: $isPresenter, content: {DetailWeatherCityView(toggleUnitsTemp: $toggleValue, isPresenter: $isPresenter, countWeatherList: $countWeatherList)} )
                 .multilineTextAlignment(.leading)
                 .navigationBarTitle(Text("Weather"), displayMode: .inline)
                 .onAppear(perform: {
@@ -53,15 +52,7 @@ struct ContentView: View {
                     print(error.localizedDescription)
                 }
                 searchViewModel.makedCityList()
-                // MARK: - start city current weather
-            
-//                addWeatherVM.save { (weather) in
-//                    self.currentTemperature = weather.temperature
-//                    self.currentCity = weather.city
-//                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
-//                    
-//                }
-                
+        
                 // MARK: - Clear CoreData
 //                if let objects = try? context.fetch(fetchRequest) {
 //                            for object in objects {

@@ -19,7 +19,6 @@ struct SeachView: View {
     @Binding var isPresenter: Bool
     @State var shouldHide = false
     @Binding var countWeatherList: Int
-    @Binding var isHide: Bool
 
     
     var body: some View {
@@ -28,7 +27,7 @@ struct SeachView: View {
             LabelCurrentCity(toggleUnitsValue: $toggleValue, currentCity: currentCity, currentTemperature: $currentTemperature)
             List {ForEach(SearchViewModel.unicalyWeatherList, id: \.id)  { weather in
                     HStack{
-                        Cell(toggleValue: $toggleValue, weather: weather.weatherCore[0], isHide: $isHide, countWeatherList: $countWeatherList)
+                        Cell(toggleValue: $toggleValue, weather: weather.weatherCore[0], countWeatherList: $countWeatherList)
                         Spacer()
                         if !self.$shouldHide.wrappedValue {
                             Button(action: {
@@ -41,7 +40,7 @@ struct SeachView: View {
                         }
                     }
                     .onAppear{
-//                        if weather.weatherCore.count > 1 { shouldHide = false }   // ??? 
+//                        if weather.weatherCore.count > 1 { shouldHide = false }   // ??? Боролся со скрытием кнопки долго и упорно
 //                        else {shouldHide = true}
                         
                     }
@@ -134,7 +133,6 @@ struct DetailWeatherCityView: View {
     @Binding var toggleUnitsTemp: Bool
     @Binding var isPresenter: Bool
     @Binding var countWeatherList: Int
-    @Binding var isHide: Bool
     var tempCityList: [Double] = []
     
     var body: some View {
@@ -159,7 +157,6 @@ struct Cell: View {
     @Binding var toggleValue: Bool
     @StateObject var addWeatherVM = AddWeatherViewModel()
     let weather: WeatherCore
-    @Binding var isHide: Bool
     @Binding var countWeatherList: Int
 
     
@@ -204,7 +201,6 @@ struct ToolBarButton: View {
                 searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
                 self.temperature = weather.temperature
                 self.currentCity = weather.city
-                searchViewModel.makedCityList()
             }
         })
         { Image(systemName: "location.circle") }
