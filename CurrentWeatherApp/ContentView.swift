@@ -52,8 +52,31 @@ struct ContentView: View {
                 } catch let error as NSError {
                     print(error.localizedDescription)
                 }
-                // MARK: - fetch cityList
                 searchViewModel.makedCityList()
+                // MARK: - start city current weather
+            
+//                addWeatherVM.save { (weather) in
+//                    self.currentTemperature = weather.temperature
+//                    self.currentCity = weather.city
+//                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
+//                    
+//                }
+                
+                // MARK: - Clear CoreData
+//                if let objects = try? context.fetch(fetchRequest) {
+//                            for object in objects {
+//                                context.delete(object)
+//                            }
+//                        }
+//
+//                        do {
+//                            try context.save()
+//                        } catch let error as NSError {
+//                            print(error.localizedDescription)
+//                        }
+                
+                print("проверка\(SearchViewModel.cityList.count)")
+                
             }
         }
 }

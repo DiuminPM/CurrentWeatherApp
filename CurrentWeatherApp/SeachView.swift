@@ -32,12 +32,19 @@ struct SeachView: View {
                         Spacer()
                         if !self.$shouldHide.wrappedValue {
                             Button(action: {
-                                searchViewModel.addCityWheater(currentCity: currentCity)
+                                searchViewModel.addCityWheater(currentCity: weather.city)
                                 isPresenter.toggle()
+                                SearchViewModel.temperaturesForCharts = []
+                                searchViewModel.addTemperaturesForChart()
+                                print(SearchViewModel.temperaturesForCharts)
                             }) { Image(systemName: "doc.text.magnifyingglass") }
                         }
                     }
-                
+                    .onAppear{
+//                        if weather.weatherCore.count > 1 { shouldHide = false }   // ??? 
+//                        else {shouldHide = true}
+                        
+                    }
                 }
             }
             .listStyle(PlainListStyle())
@@ -70,7 +77,7 @@ struct SearschContentView: View {
                     self.temperature = weather.temperature
                     self.city = weather.city
                     searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
-                    
+                    addWeatherVM.city = ""
                 }
             }
                 .font(.system(size: 18, weight: .medium))
@@ -128,6 +135,7 @@ struct DetailWeatherCityView: View {
     @Binding var isPresenter: Bool
     @Binding var countWeatherList: Int
     @Binding var isHide: Bool
+    var tempCityList: [Double] = []
     
     var body: some View {
         VStack() {
@@ -141,8 +149,8 @@ struct DetailWeatherCityView: View {
         }
         .onAppear{
             countWeatherList = SearchViewModel.cityWeathers.count
-            searchViewModel.addTemperaturesForChart()
-            print(countWeatherList)
+//            searchViewModel.addTemperaturesForChart()
+//            print(tempCityList)
         }
     }
 }
@@ -160,12 +168,10 @@ struct Cell: View {
             VStack (alignment: .leading, spacing: 8){
                 Text("\(weather.city!), \(addWeatherVM.switchUnits(temperature: weather.temperature, toggleValue: toggleValue))")
                 Text("\(weather.date!)")
-                Text("\(String(countWeatherList))")
                 }
         }
         .onAppear{
-            countWeatherList = SearchViewModel.weathersCore.count
-            print(countWeatherList)
+            
         }
     }
 

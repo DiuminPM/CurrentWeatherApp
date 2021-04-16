@@ -110,6 +110,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         }
         SearchViewModel.unicalyWeatherList = uniqueCityList
         print(uniqueCityList.count)
+
         
     }
     
