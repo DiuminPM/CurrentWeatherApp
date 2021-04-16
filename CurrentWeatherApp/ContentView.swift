@@ -40,6 +40,12 @@ struct ContentView: View {
                 }
             }
             .onAppear{
+                addWeatherVM.save { (weather) in
+                    self.currentTemperature = weather.temperature
+                    self.currentCity = weather.city
+                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
+                    addWeatherVM.city = ""
+                }
                 // MARK: - fetch CoreData
                 let context = searchViewModel.getContext()
                 let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
