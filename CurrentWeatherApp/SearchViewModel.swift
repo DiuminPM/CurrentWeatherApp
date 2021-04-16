@@ -29,21 +29,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     static var cityList: [String] = []
     static var unicalyWeatherList: [CityList] = []
     
-    typealias CityList = (String, [WeatherCore])
-//    static var cityList: [WeatherCore] = []
-    
-//    override init() {
-//        super.init()
-//        let context = getContext()
-//        let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
-//        do {
-//            SearchViewModel.weathersCore = try context.fetch(fetchRequest)
-//
-//        } catch let error as NSError {
-//            print(error.localizedDescription)
-//        }
-//        print("проверка\(SearchViewModel.weathersCore)")
-//    }
+    typealias CityList = (city: String, id: UUID, weatherCore: [WeatherCore])
     
     func fetchWeathers() {
         
@@ -118,28 +104,12 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
         }
         let uniqueCity = distinct(source: SearchViewModel.cityList)
         let uniqueCityList = uniqueCity.map{ (list) -> CityList in
-            return (list, SearchViewModel.weathersCore.filter({ (word) -> Bool in
+            return (list, UUID(), SearchViewModel.weathersCore.filter({ (word) -> Bool in
                 String((word.city)!) == list
             }))
         }
         SearchViewModel.unicalyWeatherList = uniqueCityList
         print(uniqueCityList.count)
-//        for i in 0..<SearchViewModel.weathersCore.count {
-//            for weather in SearchViewModel.weathersCore {
-//                if SearchViewModel.weathersCore[i].city != weather.city {
-//                    SearchViewModel.cityList.append(SearchViewModel.weathersCore[i])
-//                }
-//            }
-//        for cityList in SearchViewModel.weathersCore {
-//            SearchViewModel.cityList = SearchViewModel.weathersCore.filter({ (cityCore) -> Bool in
-//                if cityCore.city! != cityList.city{return true}
-//                return false
-//            })
-//
-//        print("ух")
-
-//        }
-        
         
     }
     

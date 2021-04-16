@@ -26,13 +26,13 @@ struct SeachView: View {
         VStack() {
             SearschContentView(search: $addWeatherVM.city, city: $currentCity, temperature: $currentTemperature)
             LabelCurrentCity(toggleUnitsValue: $toggleValue, currentCity: currentCity, currentTemperature: $currentTemperature)
-            List {ForEach(SearchViewModel.weathersCore, id: \.id)  { weather in
+            List {ForEach(SearchViewModel.unicalyWeatherList, id: \.id)  { weather in
                     HStack{
-                        Cell(toggleValue: $toggleValue, weather: weather, isHide: $isHide, countWeatherList: $countWeatherList)
+                        Cell(toggleValue: $toggleValue, weather: weather.weatherCore[0], isHide: $isHide, countWeatherList: $countWeatherList)
                         Spacer()
                         if !self.$shouldHide.wrappedValue {
                             Button(action: {
-                                searchViewModel.addCityWheater(currentCity: weather.city!)
+                                searchViewModel.addCityWheater(currentCity: currentCity)
                                 isPresenter.toggle()
                             }) { Image(systemName: "doc.text.magnifyingglass") }
                         }
@@ -42,7 +42,7 @@ struct SeachView: View {
             }
             .listStyle(PlainListStyle())
             .onAppear{
-                
+                searchViewModel.makedCityList()
             }
     }
 }

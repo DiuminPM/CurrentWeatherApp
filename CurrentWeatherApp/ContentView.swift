@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @State var toggleValue: Bool = false
-    @State var currentCity: String = "Petrozavodsk"
+    @State var currentCity: String = "Stutgard"
     @State var currentTemperature: Double = 0
     @State var isPresenter: Bool = false
     @State var countWeatherList: Int = 0
@@ -41,12 +41,8 @@ struct ContentView: View {
                 }
             }
             .onAppear{
-                if countWeatherList > 1 {
-                    isHide = false
-                }
-                print("тута\(countWeatherList)")
-
-                let context = getContext()
+                // MARK: - fetch CoreData
+                let context = searchViewModel.getContext()
                 let fetchRequest: NSFetchRequest<WeatherCore> = WeatherCore.fetchRequest()
                 let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
                 fetchRequest.sortDescriptors = [sortDescriptor]
@@ -56,29 +52,8 @@ struct ContentView: View {
                 } catch let error as NSError {
                     print(error.localizedDescription)
                 }
-                // MARK: - start city current weather
-                addWeatherVM.city = currentCity
-                addWeatherVM.save { (weather) in
-                    self.currentTemperature = weather.temperature
-                    self.currentCity = weather.city
-                    searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
-                    
-                }
-                
-                // MARK: - Clear CoreData
-//                if let objects = try? context.fetch(fetchRequest) {
-//                            for object in objects {
-//                                context.delete(object)
-//                            }
-//                        }
-//
-//                        do {
-//                            try context.save()
-//                        } catch let error as NSError {
-//                            print(error.localizedDescription)
-//                        }
-                print("проверка\(SearchViewModel.weathersCore)")
-                
+                // MARK: - fetch cityList
+                searchViewModel.makedCityList()
             }
         }
 }
