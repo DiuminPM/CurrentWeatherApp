@@ -87,12 +87,12 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     
     func addTemperaturesForChart() {
         for weather in SearchViewModel.cityWeathers {
-            SearchViewModel.temperaturesForCharts.append(weather.temperature)
+            SearchViewModel.temperaturesForCharts.insert(weather.temperature, at: 0)
         }
-        SearchViewModel.temperaturesForCharts = SearchViewModel.temperaturesForCharts.sorted (by: { (t1, t2) -> Bool in
-            if t1 > t2 { return false }
-            else {return true}
-        })
+//        SearchViewModel.temperaturesForCharts = SearchViewModel.temperaturesForCharts.sorted (by: { (t1, t2) -> Bool in
+//            if t1 > t2 { return false }
+//            else {return true}
+//        })
         
     }
     func distinct<T: Equatable>(source: [T]) -> [T] {
