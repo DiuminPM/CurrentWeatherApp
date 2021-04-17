@@ -115,7 +115,12 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
                 uniqueCityList[i].shouldHide = false
             } else {uniqueCityList[i].shouldHide = true}
         }
-        SearchViewModel.unicalyWeatherList = uniqueCityList
+        SearchViewModel.unicalyWeatherList = uniqueCityList.sorted(by: { (s1, s2) -> Bool in
+            if s1.weatherCore[0].date! < s2.weatherCore[0].date! {
+                return false
+            }
+            return true
+        })
         print(uniqueCityList)
         
     }

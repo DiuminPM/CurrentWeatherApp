@@ -35,13 +35,13 @@ struct SeachView: View {
                                 isPresenter.toggle()
                                 SearchViewModel.temperaturesForCharts = []
                                 searchViewModel.addTemperaturesForChart()
+                                searchViewModel.makedCityList()
                                 print(shouldHide)
                             }) { Image(systemName: "doc.text.magnifyingglass") }
                             .isHidden(weather.shouldHide, remove: weather.shouldHide)
                     }
                     .onAppear{
-                        self.shouldHide = weather.shouldHide
-                        print(shouldHide)
+                       
 //                        if weather.weatherCore.count > 1 {weather.shouldHide = false}   // ??? Боролся со скрытием кнопки долго и упорно
 //                        else {shouldHide = true}
                         
@@ -75,6 +75,7 @@ struct SearschContentView: View {
                 self.isEditing = isEditing}
             onCommit: {
                 addWeatherVM.save { (weather) in
+                    searchViewModel.makedCityList()
                     self.temperature = weather.temperature
                     self.city = weather.city
                     searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
@@ -199,6 +200,7 @@ struct ToolBarButton: View {
     @StateObject var searchViewModel = SearchViewModel()
     var body: some View {
         Button(action: {
+            searchViewModel.makedCityList()
             addWeatherVM.saveByCoordinates(coordinates: Coordinates(latitude: locationView.userLatitude, longitude: locationView.userLongitude)) { (weather) in
                 searchViewModel.saveWeatherCore(with: weather.city, with: weather.temperature, with: CurrentData.dateFormatter())
                 self.temperature = weather.temperature

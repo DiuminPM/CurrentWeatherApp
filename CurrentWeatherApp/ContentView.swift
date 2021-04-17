@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
     @StateObject var addWeatherVM = AddWeatherViewModel()
     @State var toggleValue: Bool = false
-    @State var currentCity: String = "Stutgard"
+    @State var currentCity: String = "Stuttgard"
     @State var currentTemperature: Double = 0
     @State var isPresenter: Bool = false
     @State var countWeatherList: Int = 0
