@@ -29,7 +29,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
     static var cityList: [String] = []
     static var unicalyWeatherList: [CityList] = []
     
-    typealias CityList = (city: String, id: UUID, weatherCore: [WeatherCore])
+    typealias CityList = (city: String, shouldHide: Bool, id: UUID, weatherCore: [WeatherCore])
     
     func fetchWeathers() {
         
@@ -105,16 +105,24 @@ class SearchViewModel: NSObject, SearchViewModelProtocol, ObservableObject {
             SearchViewModel.cityList.append(weatherList.city!)
         }
         let uniqueCity = distinct(source: SearchViewModel.cityList)
-        let uniqueCityList = uniqueCity.map{ (list) -> CityList in
-            return (list, UUID(), SearchViewModel.weathersCore.filter({ (word) -> Bool in
+        var uniqueCityList = uniqueCity.map{ (list) -> CityList in
+            return (list, true, UUID(), SearchViewModel.weathersCore.filter({ (word) -> Bool in
                 String((word.city)!) == list
             }))
         }
+        for i in 0..<uniqueCityList.count {
+            if uniqueCityList[i].weatherCore.count > 1 {
+                uniqueCityList[i].shouldHide = false
+            } else {uniqueCityList[i].shouldHide = true}
+        }
         SearchViewModel.unicalyWeatherList = uniqueCityList
-        print(uniqueCityList.count)
-
+        print(uniqueCityList)
         
     }
     
-    
+    func shouldedHide() -> Bool {
+        if SearchViewModel.weathersCore.count > 1 {
+            return false
+        } else {return true}
+    }
 }
